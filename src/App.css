@@ -1,38 +1,334 @@
 .App {
-  text-align: center;
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.background-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.gps-box {                    
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 5px;
+  border-radius: 5px;
+  
+  /* latitude and longitude box */
+}
+.gps-box:hover{
+  background: rgba(224, 212, 212, 0.8);
+
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.controls {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  /* start tracking , stop tracking , log gps data , reset gps , enable Autopilot all controls position here */
+}
+
+.controls button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: rgb(248, 246, 243);
+  /* no use  */
+}
+
+.controls button:hover {
+  background-color: #887e7e;
+}
+
+.controls .fa-icon {
+  margin-right: 8px;
+}
+.App {
+  position: relative; /* Allows absolute positioning of the map */
+}
+
+.gps-box, .controls {
+  margin: 20px;
+}
+
+
+
+.controls button {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  padding: 10px;
+  border: none;
+  background-color: #6f6666;
+  color: white;
+  cursor: pointer;
+  margin: 5px;
+  border-radius: 5px;
+  /* use-ful controls button */
+}
+
+.controls button:hover {
+  background-color: #342727;
+}
+
+.controls .fa-icon {
+  margin-right: 8px;
+}
+.icon-container {
+  position: absolute;
+  top: 10px;
+  left: 800px;
+  z-index: 2;
+  display: flex;
+  flex-direction: row;
+  gap: 10px; /* Adds space between the icons */
+}
+/* .icon-container:hover{
+  background: rgba(134, 129, 129, 0.8);
+} */
+
+
+.icon {
+  background: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  
+}
+
+
+.icon:hover {
+  background: rgba(134, 129, 129, 0.8);
+}
+
+/* //new change */
+
+.map-container {
+  width: 400px;
+  height: 400px;
+  left: 1px;
+  bottom: 50px;
+  top: 1px;
+}
+.video-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Hide overflow from video */
+  z-index: -1; /* Position behind all other content */
+}
+
+/* Style for the video element to cover the entire container */
+.video-js {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Cover the container without distortion */
+  z-index: -1; /* Ensure it stays behind other content */
+}
+.flight-time-button {
+  position: absolute;
+  top: 1px;
+  left: 500px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 1000;
+}
+.icon input[type="number"] {
+  width: 50px; /* Adjust width to be smaller */
+  height: 20px; /* Adjust height to be smaller */
+  font-size: 14px; /* Reduce font size */
+  text-align: center; /* Center text within input */
+  margin-top: 5px; /* Add space between icon and input */
+}
+/* Pitch & Yaw Container */
+.pitch-yaw-container {
+  position: absolute;
+  top: 27%;
+  left: 8%;
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
+  gap: 20px; /* Increased gap for better spacing */
+  background: linear-gradient(135deg, #f8f9fa, #ffffff); /* Light gradient */
+  padding: 20px;
+  border-radius: 12px; /* Softer rounded corners */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Added shadow for depth */
+  border: 1px solid #dee2e6;
+  z-index: 10;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth animation on hover */
+}
+
+.pitch-yaw-container:hover {
+  transform: translate(-50%, -50%) scale(1.05); /* Slight scale on hover */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover */
+}
+
+/* Pitch & Yaw Item */
+.pitch-yaw-item {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Increased gap between icon and text */
+  font-size: 1.2em;
+  font-weight: 500;
+  color: #495057; /* Darker font color */
+}
+
+.pitch-yaw-item input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: #dee2e6;
+  border-radius: 5px;
+  outline: none;
+  transition: background 0.3s ease;
+}
+
+.pitch-yaw-item input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #007bff; /* Blue color for the thumb */
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.pitch-yaw-item input[type="range"]::-webkit-slider-thumb:hover {
+  background: #0056b3; /* Darker blue on hover */
+}
+
+/* Joystick Button */
+.joystick-button {
+  position: fixed;
+  top: 38%;
+  left: 7%;
+  transform: translate(-50%, -50%);
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  background: linear-gradient(135deg, #6c757d, #343a40); /* Subtle gradient for the joystick button */
+  padding: 12px 18px;
+  border-radius: 50px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid #495057;
+  cursor: pointer;
+  z-index: 10;
+  transition: background 0.3s ease, transform 0.3s ease;
+  color: #fff;
 }
 
-.App-link {
-  color: #61dafb;
+.joystick-button:hover {
+  background: linear-gradient(135deg, #495057, #212529); /* Darker gradient on hover */
+  transform: translate(-50%, -50%) scale(1.1); /* Slight scale on hover */
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.joystick-button:focus {
+  outline: none;
+  box-shadow: 0 0 8px #007bff; /* Highlight focus state */
+}
+
+.joystick-button .fa-gamepad {
+  margin-right: 10px;
+  font-size: 1.5em;
+}
+
+/* Additional Styling for Text */
+.joystick-button span {
+  font-weight: 600;
+  font-size: 1.1em;
+  color: #fff;
+}
+
+/* Responsive Behavior */
+@media screen and (max-width: 768px) {
+  .pitch-yaw-container {
+    top: 30%;
+    left: 50%;
+    padding: 15px;
   }
-  to {
-    transform: rotate(360deg);
+
+  .joystick-button {
+    top: 108%;
+    left: 70%;
   }
 }
+
+/* Base Station Box */
+.base-station-box {
+  position: absolute;
+  top: 10px;
+  left: 1650px;
+  padding: 15px 20px;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  border: 1px solid #dee2e6;
+  font-size: 15px;
+  font-weight: 500;
+  color: #343a40;
+  z-index: 10;
+  transition: box-shadow 0.3s ease;
+}
+
+.base-station-box:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Drone Info Box */
+.drone-info-box {
+  position: absolute;
+  top: 100px;
+  left: 1650px;
+  padding: 15px 20px;
+  background: linear-gradient(135deg, #ffffff, #e9ecef);
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  border: 1px solid #ced4da;
+  font-size: 15px;
+  font-weight: 500;
+  color: #495057;
+  z-index: 10;
+  transition: box-shadow 0.3s ease;
+}
+
+.drone-info-box:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Common Styles */
+.box-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #212529;
+}
+
+.box-content {
+  line-height: 1.5;
+}
+
+
+
+
